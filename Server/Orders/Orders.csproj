@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Tools.ServiceDefaults\Tools.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\Tools.Aspire.ServiceDefaults\Tools.Aspire.ServiceDefaults.csproj" />
     </ItemGroup>
 
     <ItemGroup>
