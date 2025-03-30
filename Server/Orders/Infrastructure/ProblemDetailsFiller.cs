@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Tools.Infrastructure;
 
 namespace Orders.Infrastructure;
 

@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <ItemGroup>
+        <ProjectReference Include="..\Orders.Api\Orders.Api.csproj" />
         <ProjectReference Include="..\Orders.Database\Orders.Database.csproj" />
         <ProjectReference Include="..\Tools.Aspire.ServiceDefaults\Tools.Aspire.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\Tools.Infrastructure\Tools.Infrastructure.csproj" />
     </ItemGroup>
 
     

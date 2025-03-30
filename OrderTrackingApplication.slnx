@@ -16,9 +16,11 @@
   </Folder>
   <Folder Name="/Server/.Tools/">
     <Project Path="Server\Tools.Aspire.ServiceDefaults\Tools.Aspire.ServiceDefaults.csproj" Type="Classic C#" />
+    <Project Path="Server\Tools.Infrastructure\Tools.Infrastructure.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Server/Orders/">
     <Project Path="Server\Orders.Abstractions\Orders.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="Server\Orders.Api\Orders.Api.csproj" Type="Classic C#" />
     <Project Path="Server\Orders.Database\Orders.Database.csproj" Type="Classic C#" />
     <Project Path="Server\Orders.Tests\Orders.Tests.csproj" Type="Classic C#" />
     <Project Path="Server\Orders\Orders.csproj" Type="Classic C#" />
