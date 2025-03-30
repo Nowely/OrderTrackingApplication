@@ -1,3 +1,4 @@
+using Orders.Database;
 using Orders.Infrastructure;
 using Tools.Aspire.ServiceDefaults;
 

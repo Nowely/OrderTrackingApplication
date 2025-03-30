@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Orders.Abstractions;
 
-namespace Orders.Infrastructure;
+namespace Orders.Database;
 
 /// <summary> Контекст базы данных заказов </summary>
 public sealed class OrderContext : DbContext {
@@ -10,4 +11,8 @@ public sealed class OrderContext : DbContext {
 		Database.EnsureCreated();
 		//DbInitializer.Initialize(this);
 	}
+
+	/// <summary> Заказы </summary>
+	public DbSet<Order> Orders => Set<Order>();
+
 }
