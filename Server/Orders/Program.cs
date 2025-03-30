@@ -1,8 +1,10 @@
+using Tools.Aspire.ServiceDefaults;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
-
+builder.AddDefaultOpenApi();
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
@@ -10,6 +12,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
+
+app.UseDefaultOpenApi();
 
 string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
 

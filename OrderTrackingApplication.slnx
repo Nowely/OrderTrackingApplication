@@ -13,11 +13,13 @@
   </Folder>
   <Folder Name="/Server/">
     <Project Path="Server\Aspire.AppHost\Aspire.AppHost.csproj" Type="Classic C#" />
-    <Project Path="Server\Orders.Tests\Orders.Tests.csproj" Type="Classic C#" />
-    <Project Path="Server\Orders\Orders.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Server/.Tools/">
     <Project Path="Server\Tools.Aspire.ServiceDefaults\Tools.Aspire.ServiceDefaults.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Server/Orders/">
+    <Project Path="Server\Orders.Tests\Orders.Tests.csproj" Type="Classic C#" />
+    <Project Path="Server\Orders\Orders.csproj" Type="Classic C#" />
   </Folder>
   <Project Path="Client\Client.esproj" Type="{54A90642-561A-4BB1-A94E-469ADEE60C69}">
     <Configuration Solution="Release|Any CPU" Project="Debug|Any CPU" />
