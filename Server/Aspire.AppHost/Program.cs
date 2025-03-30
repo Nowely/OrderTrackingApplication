@@ -1,7 +1,11 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+var postgres = builder.AddPostgres("Postgres").WithPgAdmin();
+var orderDb = postgres.AddDatabase("OrderDb");
+
 var orders = builder
-	.AddProject<Projects.Orders>("Server");
+	.AddProject<Projects.Orders>("Server")
+	.WithReference(orderDb);
 
 var client = builder
 	.AddNpmApp("Client", "../../Client", "dev")
