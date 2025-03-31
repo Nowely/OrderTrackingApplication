@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Net.Http.Headers;
+using Orders.Api.Services;
 using Orders.Models;
 
 namespace Orders.Api;
@@ -22,11 +24,13 @@ public static class OrdersApi {
 		group.MapPost("/", Create);
 		group.MapDelete("/", Delete).ProducesProblem(501);
 
+		// SSE endpoint
+		group.MapGet("/status/subscribtion", SubscribeOnStatusUpdate);
+
 		return app;
 	}
 
-
-	//TODO Validation on id > 0
+	//TODO Validation on id <= 0
 	/// <summary> Получение информации о заказе по его идентификатору </summary>
 	private static async Task<Ok<OrderGet>> GetById([AsParameters] GetOrderByIdRequest request) =>
 		TypedResults.Ok(await request.Service.GetByIdAsync(request.Id));
@@ -49,5 +53,21 @@ public static class OrdersApi {
 	private static async Task<NoContent> Delete([AsParameters] DeleteOrdersRequest request) {
 		await request.Service.DeleteAsync(request.Ids);
 		return TypedResults.NoContent();
+	}
+
+	/// <summary> Подписка на изменение статуса заказов. Используется Server-Sent Events </summary>
+	private static async Task SubscribeOnStatusUpdate([AsParameters] SubscribeOnOrderStatusRequest request) {
+		request.HttpContext.Response.Headers.Append(HeaderNames.ContentType, "text/event-stream");
+		//context.Response.Headers.Append("Cache-Control", "no-cache");
+		//context.Response.Headers.Append("Connection", "keep-alive");
+
+		var connectionId = request.Service.AddConnection(request.HttpContext.Response, request.Token);
+
+		// Удерживаем соединение открытым
+		while (!request.Token.IsCancellationRequested) {
+			await Task.Delay(1000, request.Token);
+		}
+
+		request.Service.RemoveConnection(connectionId);
 	}
 }

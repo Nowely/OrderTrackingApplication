@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Orders.Api.Services;
 using Orders.Models;
 
 namespace Orders.Api;
@@ -25,7 +27,7 @@ public record GetOrderListRequest {
 
 /// <summary> Создание нового заказа </summary>
 public record CreateOrderRequest {
-	/// <summary> Идентификатор заказа </summary>
+	/// <summary> Модель добавления заказа </summary>
 	[FromBody]
 	[Required]
 	public required OrderCreate Order { get; set; }
@@ -37,7 +39,7 @@ public record CreateOrderRequest {
 
 /// <summary> Обновление статуса заказа </summary>
 public record UpdateOrderStatusRequest {
-	/// <summary> Идентификатор заказа </summary>
+	/// <summary> Модель обновления заказа </summary>
 	[FromBody]
 	[Required]
 	public required OrderStatusUpdate OrderStatus { get; set; }
@@ -56,4 +58,19 @@ public record DeleteOrdersRequest {
 	/// <summary> Сервис для работы с заказами </summary>
 	[FromServices]
 	public required OrderService Service { get; set; }
+}
+
+
+/// <summary> Обновление статуса заказа </summary>
+public record SubscribeOnOrderStatusRequest {
+
+	/// <summary> Контекст http запроса </summary>
+	public required HttpContext HttpContext { get; set; }
+
+	/// <summary> Токен отмены </summary>
+	public CancellationToken Token { get; set; } = CancellationToken.None;
+
+	/// <summary> Сервис для работы с заказами </summary>
+	[FromServices]
+	public required OrderStatusSubscriptionService Service { get; set; }
 }

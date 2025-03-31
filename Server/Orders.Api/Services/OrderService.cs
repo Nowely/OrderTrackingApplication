@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Orders.Database;
 using Orders.Models;
 using Tools.Infrastructure;
 
-namespace Orders.Api;
+namespace Orders.Api.Services;
 
 /// <summary> Сервис для работы с заказами </summary>
-public class OrderService(ILogger<OrderService> logger, OrderContext context) {
+public class OrderService(ILogger<OrderService> logger, OrderContext context, IPublishEndpoint publisher) {
 	/// <summary> Получение заказа по идентификатору </summary>
 	/// <exception cref="NotFoundException">If no entity is found</exception>
 	public async Task<OrderGet> GetByIdAsync(int id) {
@@ -38,6 +39,12 @@ public class OrderService(ILogger<OrderService> logger, OrderContext context) {
 		order.Status = newOrderStatus.Status;
 		context.Orders.Update(order);
 		await context.SaveChangesAsync();
+
+		await publisher.Publish(new OrderStatusMessage {
+			Id = order.Id,
+			Status = order.Status
+		});
+
 		return order.ToGet();
 	}
 
@@ -45,4 +52,13 @@ public class OrderService(ILogger<OrderService> logger, OrderContext context) {
 	public async Task<int> DeleteAsync(int[] ids) {
 		return await context.Orders.Where(o => ids.Contains(o.Id)).ExecuteDeleteAsync();
 	}
+}
+
+/// <summary> Dto обновления статуса заказа </summary>
+public record OrderStatusMessage {
+	/// <summary> Идентификатор </summary>
+	public int Id { get; set; }
+
+	/// <summary> Статус заказа </summary>
+	public OrderStatus Status { set; get; }
 }
