@@ -10,7 +10,10 @@ public static class OpenApiExtensions {
 	public static IHostApplicationBuilder AddDefaultOpenApi(this IHostApplicationBuilder builder) {
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(options => {
-			//options.IncludeXmlComments();
+			foreach (string filePath in Directory.GetFiles(AppContext.BaseDirectory, "*.xml")) {
+				options.IncludeXmlComments(filePath);
+			}
+
 		});
 
 		return builder;

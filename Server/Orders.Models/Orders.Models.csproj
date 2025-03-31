@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <ProjectReference Include="..\Orders.Database\Orders.Database.csproj" />
+    <PackageReference Include="Riok.Mapperly" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Tools.Infrastructure\Tools.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

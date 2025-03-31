@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Orders.Models;
 
 namespace Orders.Api;
 
@@ -15,49 +16,38 @@ public static class OrdersApi {
 				new ProducesResponseTypeMetadata(500, typeof(ProblemDetails))
 			);
 
-		group.MapGet("/501", Get501);
-		/*
-		group.MapGet("/500", Get500);
-		group.MapGet("/400/validation", GetValidation400);
-		group.MapGet("/404", Get404);
-
-		group.MapGet("/{id:guid}", GetById);
+		group.MapGet("/{id:int}", GetById).ProducesProblem(404).ProducesValidationProblem();
 		group.MapGet("/", GetList);
-		group.MapPut("/", Update).ProducesProblem(405);
+		group.MapPut("/status", UpdateStatus).ProducesProblem(404);
 		group.MapPost("/", Create);
-		group.MapDelete("/", Delete);*/
+		group.MapDelete("/", Delete).ProducesProblem(501);
 
 		return app;
 	}
 
-	private static async Task<Ok> Get501() => throw new NotImplementedException("Method not implemented!");
-	/*
-	private static async Task<Ok> Get500() => throw new Exception("Internal Server Error!");
 
-	[ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
-	private static async Task<Ok> GetValidation400() =>
-		throw new ValidationException("Validation failed!", new() { ["Field"] = ["Error1", "Error2"] });
+	//TODO Validation on id > 0
+	/// <summary> Получение информации о заказе по его идентификатору </summary>
+	private static async Task<Ok<OrderGet>> GetById([AsParameters] GetOrderByIdRequest request) =>
+		TypedResults.Ok(await request.Service.GetByIdAsync(request.Id));
 
-	private static async Task<Ok> Get404() => throw new NotFoundException("Not found!");
+	/// <summary> Получение списка запросов </summary>
+	/// <exception cref="NotImplementedException"></exception>
+	private static async Task<Ok<OrderItem[]>> GetList([AsParameters] GetOrderListRequest request) =>
+		TypedResults.Ok(await request.Service.GetListAsync());
 
-
-	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	private static async Task<Ok> GetById([AsParameters] GetByIdRequest request) =>
-		throw new NotImplementedException();
-
-	private static async Task<Ok> GetList([AsParameters] GetAllPostRequest request) {
-		throw new NotImplementedException();
+	/// <summary> Создание нового заказа </summary>
+	private static async Task<Created<OrderGet>> Create([AsParameters] CreateOrderRequest request) {
+		return TypedResults.Created("", await request.Service.CreateAsync(request.Order));
 	}
 
-	private static async Task<Created> Create([AsParameters] CreateRequest request) {
-		throw new NotImplementedException();
-	}
+	/// <summary> Обновление статуса заказа </summary>
+	private static async Task<Created<OrderGet>> UpdateStatus([AsParameters] UpdateOrderStatusRequest request) =>
+		TypedResults.Created("", await request.Service.UpdateStatusAsync(request.OrderStatus));
 
-	private static async Task<Created> Update([AsParameters] UpdateRequest request) {
-		throw new NotImplementedException();
+	/// <summary> Удаление заказа </summary>
+	private static async Task<NoContent> Delete([AsParameters] DeleteOrdersRequest request) {
+		await request.Service.DeleteAsync(request.Ids);
+		return TypedResults.NoContent();
 	}
-
-	private static async Task<NoContent> Delete([AsParameters] DeleteRequest request) {
-		throw new NotImplementedException();
-	}*/
 }

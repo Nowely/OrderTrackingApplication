@@ -3,6 +3,6 @@
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Orders.Abstractions\Orders.Abstractions.csproj" />
+    <ProjectReference Include="..\Orders.Models\Orders.Models.csproj" />
   </ItemGroup>
 </Project>

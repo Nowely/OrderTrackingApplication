@@ -9,7 +9,9 @@ builder.AddServiceDefaults();
 builder.AddDefaultOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ProblemDetailsFiller>();
-builder.AddNpgsqlDbContext<OrderContext>("OrderDb");
+builder.AddNpgsqlDbContext<OrderContext>("OrderDb", null,
+	options => options.AddInterceptors(new CreateInterceptor(), new UpdateInterceptor()));
+builder.Services.AddScoped<OrderService>();
 
 var app = builder.Build();
 
@@ -21,4 +23,3 @@ app.MapOrdersApiV1();
 app.MapDefaultEndpoints();
 
 app.Run();
-

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Orders.Abstractions;
+using Orders.Models;
 
 namespace Orders.Database;
 
@@ -15,4 +15,7 @@ public sealed class OrderContext : DbContext {
 	/// <summary> Заказы </summary>
 	public DbSet<Order> Orders => Set<Order>();
 
+	/// <inheritdoc/>
+	protected override void OnModelCreating(ModelBuilder modelBuilder) {
+	}
 }
