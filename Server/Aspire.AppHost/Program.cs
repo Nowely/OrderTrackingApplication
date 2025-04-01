@@ -3,7 +3,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var postgres = builder.AddPostgres("Postgres").WithPgAdmin();
 var orderDb = postgres.AddDatabase("OrderDb");
 
-var rabbitmq = builder.AddRabbitMQ("rabbitmq").WithManagementPlugin();
+var rabbitmq = builder.AddRabbitMQ("Rabbit").WithManagementPlugin();
 
 var orders = builder
 	.AddProject<Projects.Orders>("Server")
@@ -11,10 +11,13 @@ var orders = builder
 	.WithReference(rabbitmq)
 	.WaitFor(rabbitmq);
 
+orders.WithEnvironment("SelfUrl", orders.GetEndpoint("http"));
+
 var client = builder
 	.AddNpmApp("Client", "../../Client", "dev")
 	.WithReference(orders)
 	.WithEndpoint(3000, scheme: "https", env: "PORT")
+	.WithEnvironment("VITE_SERVER_URL", orders.GetEndpoint("http"))
 	.ExcludeFromManifest();
 
 builder.Build().Run();

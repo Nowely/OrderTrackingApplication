@@ -21,11 +21,13 @@ builder.Services.AddMassTransit(x => {
 
 	x.UsingRabbitMq((context, config) => {
 		var configService = context.GetRequiredService<IConfiguration>();
-		var connectionString = configService.GetConnectionString("rabbitmq");
+		var connectionString = configService.GetConnectionString("Rabbit");
 		config.ConfigureEndpoints(context);
 		config.Host(connectionString);
 	});
 });
+builder.Services.AddHostedService<ScopedBackgroundServiceHandler>();
+builder.AddOpenApiSaving("assets/orders.v1.json", "swagger/v1/swagger.json");
 
 var app = builder.Build();
 
