@@ -9,6 +9,7 @@ using Tools.Aspire.ServiceDefaults;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddAllowAllCors();
 builder.AddDefaultOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ProblemDetailsFiller>();
@@ -31,6 +32,7 @@ builder.AddOpenApiSaving("assets/orders.v1.json", "swagger/v1/swagger.json");
 
 var app = builder.Build();
 
+app.UseAllowAllCors();
 app.UseExceptionHandler();
 app.UseDefaultOpenApi();
 
