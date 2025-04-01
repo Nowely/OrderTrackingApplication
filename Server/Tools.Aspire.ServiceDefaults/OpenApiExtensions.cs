@@ -31,7 +31,12 @@ public static class OpenApiExtensions {
 		return app;
 	}
 
-	/// <summary> Сохраняет в файловой системе open api файл, которое генерирует приложение.  </summary>
+	/// <summary>
+	/// Сохраняет в файловой системе open api файл, которое генерирует приложение.
+	/// </summary>
+	/// <param name="builder"></param>
+	/// <param name="filePath"> Путь и название файла относительно корня приложения (Solution root). Например, assets/orders.v1.json </param>
+	/// <param name="swaggerUrl"> Путь, откуда можно скачать сгенерированную open api спецификацию относительно адреса текущего приложения. Например, swagger/v1/swagger.json </param>
 	public static IHostApplicationBuilder AddOpenApiSaving(
 		this IHostApplicationBuilder builder,
 		string filePath,
@@ -44,6 +49,7 @@ public static class OpenApiExtensions {
 		builder.Services.AddScoped<IScopedBackgroundService>(sp => {
 			var logger = sp.GetRequiredService<ILogger<SwaggerGenerationScopedBackgroundService>>();
 			var client = sp.GetRequiredService<IHttpClientFactory>().CreateClient();
+			//TODO SelfUrl может отсутствовать. Значени по умолчанию - не выход.
 			var selfUrl = sp.GetRequiredService<IConfiguration>().GetValue<string>("SelfUrl", "")!;
 			var rootPath = FindSolutionRoot();
 			filePath = Path.Combine(rootPath, filePath);
@@ -54,18 +60,20 @@ public static class OpenApiExtensions {
 		});
 
 		return builder;
-	}
 
-	private static string FindSolutionRoot() {
-		var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
 
-		while (directory != null && !directory.GetFiles("*.sln?").Any()) {
-			directory = directory.Parent;
+		static string FindSolutionRoot() {
+			var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+
+			while (directory != null && !directory.GetFiles("*.sln?").Any()) {
+				directory = directory.Parent;
+			}
+
+			return directory?.FullName ?? throw new InvalidOperationException("Solution root not found");
 		}
-
-		return directory?.FullName
-		       ?? throw new InvalidOperationException("Solution root not found");
 	}
+
+
 
 	/// <summary>Для получения файла со сваггером </summary>
 	public sealed class SwaggerGenerationScopedBackgroundService(
