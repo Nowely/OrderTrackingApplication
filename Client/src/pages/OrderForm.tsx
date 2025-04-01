@@ -1,23 +1,31 @@
-// components/OrderForm.tsx
-import {
-	Input,
-	Button,
-	Dialog, Portal, AspectRatio, CloseButton,
-} from '@chakra-ui/react';
-import { useRef } from 'react';
-import {useOrderStore} from "./useOrderStore.ts";
+import { Button, CloseButton, Dialog, Input, Portal } from '@chakra-ui/react'
+import { Api } from '../shared/api/api.ts'
+import { useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
-export const OrderForm = ({isOpen, onClose}: any) => {
-	const { addOrder } = useOrderStore();
-	const inputRef = useRef<HTMLInputElement>(null);
+export const OrderForm = ({ isOpen, onClose }: any) => {
+	const queryClient = useQueryClient()
+
+	const { mutate: addOrder, isSuccess, isPending } = Api.useMutation('post', '/api/v1/orders', {
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get', '/api/v1/orders'] })
+	})
 
 	const handleSubmit = (e: any) => {
-		e.preventDefault();
-		if (inputRef.current?.value) {
-			addOrder({ title: inputRef.current.value });
-			onClose();
+		e.preventDefault()
+
+		const formData = new FormData(e.target)
+		const description = formData.get('OrderName')?.toString()
+
+		if (description) {
+			addOrder({ body: { description } })
 		}
-	};
+	}
+
+	useEffect(() => {
+		if (isSuccess) {
+			onClose()
+		}
+	}, [isSuccess])
 
 	return (
 		<Dialog.Root open={isOpen} onOpenChange={onClose} placement="center">
@@ -26,22 +34,24 @@ export const OrderForm = ({isOpen, onClose}: any) => {
 				<Dialog.Positioner>
 					<Dialog.Content>
 						<Dialog.Body pt="4">
-							<Dialog.Title>Create New Order</Dialog.Title>
+							<Dialog.Title>Создание нового заказа</Dialog.Title>
 							<Dialog.Description mb="4">
-								This is a dialog with some content and a video.
+								Заполните поля и нажмите "Создать"
 							</Dialog.Description>
-							<AspectRatio ratio={4 / 3} rounded="lg" overflow="hidden">
-								<form onSubmit={handleSubmit}>
-									{/*<FormControl>
-										<FormLabel>Order Title</FormLabel>
-										<Input ref={inputRef} placeholder="Enter order title" />
-									</FormControl>*/}
-
-									<Button mt={4} colorScheme="blue" type="submit">
-										Create
-									</Button>
-								</form>
-							</AspectRatio>
+							<form onSubmit={handleSubmit}>
+								<Input
+									name="OrderName"
+									placeholder="Введите описание заказа"
+								/>
+								<Button
+									placeContent="center"
+									mt={4}
+									colorScheme="blue"
+									type="submit"
+									loading={isPending}
+									children="Создать"
+								/>
+							</form>
 						</Dialog.Body>
 						<Dialog.CloseTrigger top="0" insetEnd="-12" asChild>
 							<CloseButton bg="bg" size="sm" />
@@ -50,5 +60,5 @@ export const OrderForm = ({isOpen, onClose}: any) => {
 				</Dialog.Positioner>
 			</Portal>
 		</Dialog.Root>
-	);
+	)
 }

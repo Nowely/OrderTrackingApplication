@@ -25,7 +25,7 @@ public static class OrdersApi {
 		group.MapDelete("/", Delete).ProducesProblem(501);
 
 		// SSE endpoint
-		group.MapGet("/status/subscribtion", SubscribeOnStatusUpdate);
+		group.MapGet("/status/subscription", SubscribeOnStatusUpdate);
 
 		return app;
 	}

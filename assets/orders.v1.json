@@ -234,7 +234,7 @@
         }
       }
     },
-    "/api/v1/orders/status/subscribtion": {
+    "/api/v1/orders/status/subscription": {
       "get": {
         "tags": [
           "OrdersApi"
@@ -258,6 +258,9 @@
   "components": {
     "schemas": {
       "HttpValidationProblemDetails": {
+        "required": [
+          "errors"
+        ],
         "type": "object",
         "properties": {
           "type": {
@@ -295,6 +298,9 @@
         "additionalProperties": { }
       },
       "OrderCreate": {
+        "required": [
+          "description"
+        ],
         "type": "object",
         "properties": {
           "description": {
@@ -308,7 +314,12 @@
       },
       "OrderGet": {
         "required": [
-          "description"
+          "createdAt",
+          "description",
+          "id",
+          "orderNumber",
+          "status",
+          "updatedAt"
         ],
         "type": "object",
         "properties": {
@@ -345,6 +356,11 @@
         "description": "Dto информации об заказе"
       },
       "OrderItem": {
+        "required": [
+          "createdAt",
+          "id",
+          "orderNumber"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -357,8 +373,10 @@
             "description": "Номер заказа",
             "format": "int32"
           },
-          "status": {
-            "$ref": "#/components/schemas/OrderStatus"
+          "createdAt": {
+            "type": "string",
+            "description": "Дата создания",
+            "format": "date-time"
           }
         },
         "additionalProperties": false,
@@ -375,6 +393,10 @@
         "description": "Статус заказа"
       },
       "OrderStatusUpdate": {
+        "required": [
+          "id",
+          "status"
+        ],
         "type": "object",
         "properties": {
           "id": {
