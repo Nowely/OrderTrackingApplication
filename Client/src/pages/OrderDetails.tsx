@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom'
-import { Box, DataList, Heading } from '@chakra-ui/react'
+import { Badge, Box, DataList, Heading, HStack, List, ListItem } from '@chakra-ui/react'
 import { Api, BASE_URL } from '../shared/api/api.ts'
 import { formatDateIntl } from '../shared/utils/FormatDateIntl.tsx'
 import { useEffect } from 'react'
+import { useOrderStatusStore } from './useOrderStore.ts'
 
 export const OrderDetails = () => {
 	const { orderId } = useParams()
@@ -14,21 +15,16 @@ export const OrderDetails = () => {
 		}
 	})
 
-	//const { data } = Api.useQuery('get', '/api/v1/orders/status/subscribtion')
-
-	//const { orders, updateOrderStatus } = useOrderStore()
-	//const order = orders.find((o) => o.id === orderId)
+	const { statuses, addStatus } = useOrderStatusStore()
 
 	useEffect(() => {
 		if (!orderId) return
 
-		//const eventSource = new EventSource(`/api/orders/${orderId}/stream`)
 		const eventSource = new EventSource(`${BASE_URL}/api/v1/orders/status/subscription`)
 
 		eventSource.onmessage = (e) => {
 			const data = JSON.parse(e.data)
-			console.log(data)
-			//updateOrderStatus(orderId, data.status)
+			addStatus(data)
 		}
 
 		return () => eventSource.close()
@@ -62,35 +58,32 @@ export const OrderDetails = () => {
 				</DataList.Item>
 			</DataList.Root>
 
-			{/*<Heading size="md" mb={2}>
-				Status History
-			</Heading>
+			<br />
+			<Heading size="md" mb={2}> История изменения </Heading>
 
-			<List.Root spacing={3}>
-				{order.updates.map((update, index) => (
-					<ListItem key={index}>
-						<Badge mr={2}>
-							{new Date(update.timestamp).toLocaleTimeString()}
-						</Badge>
-						<Tag colorScheme={colorSchemes[update.status]}>
-							{update.status}
-						</Tag>
-					</ListItem>
-				))}
-			</List.Root>*/}
+			<List.Root gap={3}>
+				{statuses
+					.filter(value => value.id == orderId)
+					.map((value, index) => (
+						<ListItem key={index}>
+								Статус изменен <Badge> {formatDateIntl(value.updatedAt)} </Badge>
+								на <Badge> {translateStatus(value.status)} </Badge>
+						</ListItem>
+					))}
+			</List.Root>
 		</Box>
 	)
 }
 
 function translateStatus(status: 'Created' | 'Shipped' | 'Delivered' | 'Cancelled') {
 	switch (status) {
-		case "Created":
-			return "Создан"
-		case "Shipped":
-			return "Отправлен"
-		case "Delivered":
-			return "Доставлен"
-		case "Cancelled":
-			return "Отменен"
+		case 'Created':
+			return 'Создан'
+		case 'Shipped':
+			return 'Отправлен'
+		case 'Delivered':
+			return 'Доставлен'
+		case 'Cancelled':
+			return 'Отменен'
 	}
 }

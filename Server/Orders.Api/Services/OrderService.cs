@@ -42,7 +42,8 @@ public class OrderService(ILogger<OrderService> logger, OrderContext context, IP
 
 		await publisher.Publish(new OrderStatusMessage {
 			Id = order.Id,
-			Status = order.Status
+			Status = order.Status,
+			UpdatedAt = order.UpdatedAt,
 		});
 
 		return order.ToGet();
@@ -56,9 +57,12 @@ public class OrderService(ILogger<OrderService> logger, OrderContext context, IP
 
 /// <summary> Dto обновления статуса заказа </summary>
 public record OrderStatusMessage {
-	/// <summary> Идентификатор </summary>
+	/// <summary> Идентификатор заказа </summary>
 	public int Id { get; set; }
 
 	/// <summary> Статус заказа </summary>
 	public OrderStatus Status { set; get; }
+
+	/// <summary> Дата обновления </summary>
+	public DateTime UpdatedAt { get; set; }
 }

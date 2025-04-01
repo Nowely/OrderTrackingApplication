@@ -1,53 +1,23 @@
 // store/orderStore.ts
 import { create } from 'zustand'
+import { components } from '../shared/api/orders.v1'
 
-interface Order {
+type OrderStatus = components['schemas']['OrderStatus']
+
+interface OrderStatusMessage {
 	id: string
-	title: string
-	status: 'pending' | 'processing' | 'shipped' | 'delivered'
-	createdAt: Date
-	updates: { status: string; timestamp: Date }[]
+	status: OrderStatus
+	updatedAt: string
 }
 
-interface OrderStore {
-	orders: Order[]
-	addOrder: (
-		order: Omit<Order, 'id' | 'createdAt' | 'status' | 'updates'>
-	) => void
-	updateOrderStatus: (orderId: string, newStatus: Order['status']) => void
+interface OrderStatusStore {
+	statuses: OrderStatusMessage[]
+	addStatus: (order: OrderStatusMessage) => void,
 }
 
-export const useOrderStore = create<OrderStore>((set) => ({
-	orders: [],
-	addOrder: (order) =>
-		set((state) => ({
-			orders: [
-				...state.orders,
-				{
-					...order,
-					id: Math.random().toString(36).substr(2, 9),
-					status: 'pending',
-					createdAt: new Date(),
-					updates: []
-				}
-			]
-		})),
-	updateOrderStatus: (orderId, newStatus) =>
-		set((state) => ({
-			orders: state.orders.map((order) =>
-				order.id === orderId
-					? {
-							...order,
-							status: newStatus,
-							updates: [
-								...order.updates,
-								{
-									status: newStatus,
-									timestamp: new Date()
-								}
-							]
-						}
-					: order
-			)
-		}))
+export const useOrderStatusStore = create<OrderStatusStore>((set) => ({
+	statuses: [],
+	addStatus: (status: OrderStatusMessage) => {
+		 set((state) => ({ statuses: [...state.statuses, status] }))
+	}
 }))

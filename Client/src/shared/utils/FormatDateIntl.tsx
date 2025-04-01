@@ -1,4 +1,7 @@
-export function formatDateIntl(date: string): string {
+export function formatDateIntl(date?: string): string {
+	if (!date) {
+		return '';
+	}
 	return new Intl.DateTimeFormat('ru-RU', {
 		day: 'numeric',
 		month: 'long',
