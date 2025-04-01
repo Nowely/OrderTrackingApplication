@@ -8,6 +8,6 @@ public record OrderItem {
 	/// <summary> Номер заказа </summary>
 	public int OrderNumber { get; set; }
 
-	/// <summary> Статус заказа </summary>
-	public OrderStatus Status { set; get; }
+	/// <summary> Дата создания </summary>
+	public DateTime CreatedAt { get; set; }
 }

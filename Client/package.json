@@ -1,34 +1,35 @@
 {
-  "name": "order-tracking",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "api:update": "npx openapi-typescript ../assets/orders.v1.json -o ./src/shared/api/orders.v1.d.ts"
-  },
-  "dependencies": {
-    "@chakra-ui/react": "^3.15.0",
-    "@emotion/react": "^11.14.0",
-    "@tanstack/react-query": "^5.71.1",
-    "next-themes": "^0.4.6",
-    "openapi-fetch": "^0.13.5",
-    "openapi-react-query": "^0.3.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-icons": "^5.5.0",
-    "react-router-dom": "^7.4.1",
-    "zustand": "^5.0.3"
-  },
-  "devDependencies": {
-    "@types/node": "^22.13.16",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react": "^4.3.4",
-    "openapi-typescript": "^7.6.1",
-    "typescript": "^5.8.2",
-    "vite": "^6.2.4"
-  }
+	"name": "order-tracking",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"api:update": "npx openapi-typescript ../assets/orders.v1.json -o ./src/shared/api/orders.v1.d.ts"
+	},
+	"dependencies": {
+		"@chakra-ui/react": "^3.15.0",
+		"@emotion/react": "^11.14.0",
+		"@tanstack/react-query": "^5.71.1",
+		"next-themes": "^0.4.6",
+		"openapi-fetch": "^0.13.5",
+		"openapi-react-query": "^0.3.1",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"react-icons": "^5.5.0",
+		"react-router-dom": "^7.4.1",
+		"zustand": "^5.0.3"
+	},
+	"devDependencies": {
+		"@types/node": "^22.13.16",
+		"@types/react": "^19.0.12",
+		"@types/react-dom": "^19.0.4",
+		"@vitejs/plugin-react": "^4.3.4",
+		"openapi-typescript": "^7.6.1",
+		"prettier": "3.5.3",
+		"typescript": "^5.8.2",
+		"vite": "^6.2.4"
+	}
 }

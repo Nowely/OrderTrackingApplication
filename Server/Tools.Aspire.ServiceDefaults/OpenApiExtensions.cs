@@ -1,9 +1,13 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Reflection;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Tools.Aspire.ServiceDefaults;
 
@@ -16,6 +20,8 @@ public static class OpenApiExtensions {
 			foreach (string filePath in Directory.GetFiles(AppContext.BaseDirectory, "*.xml")) {
 				options.IncludeXmlComments(filePath);
 			}
+
+			options.SchemaFilter<RequiredMemberFilter>();
 		});
 
 		return builder;
@@ -105,3 +111,31 @@ public static class OpenApiExtensions {
 		}
 	}
 }
+
+internal class RequiredMemberFilter : ISchemaFilter {
+
+	public void Apply(OpenApiSchema schema, SchemaFilterContext context) {
+		var nullabilityContext = new NullabilityInfoContext();
+		var properties = context.Type.GetProperties();
+
+		foreach (var property in properties) {
+			if (property.HasAttribute<JsonIgnoreAttribute>()) continue;
+
+			var jsonName = property.Name;
+			if (property.HasAttribute<JsonPropertyNameAttribute>()) {
+				jsonName = property.GetCustomAttribute<JsonPropertyNameAttribute>()!.Name;
+			}
+
+			var jsonKey = schema.Properties.Keys.SingleOrDefault(key =>
+				string.Equals(key, jsonName, StringComparison.OrdinalIgnoreCase));
+
+			if (string.IsNullOrWhiteSpace(jsonKey)) continue;
+
+			var nullabilityInfo = nullabilityContext.Create(property);
+			if (nullabilityInfo.ReadState == NullabilityState.Nullable) continue;
+
+			schema.Required.Add(jsonKey);
+		}
+	}
+}
+
