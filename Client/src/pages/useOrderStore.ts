@@ -2,7 +2,7 @@
 import { create } from 'zustand'
 import { components } from '../shared/api/orders.v1'
 
-type OrderStatus = components['schemas']['OrderStatus']
+export type OrderStatus = components['schemas']['OrderStatus']
 
 interface OrderStatusMessage {
 	id: string

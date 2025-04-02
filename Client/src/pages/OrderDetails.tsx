@@ -1,12 +1,14 @@
 import { useParams } from 'react-router-dom'
-import { Badge, Box, DataList, Heading, HStack, List, ListItem } from '@chakra-ui/react'
+import { Badge, Box, Button, DataList, Heading, HStack, List, ListItem, Stack, useDisclosure } from '@chakra-ui/react'
 import { Api, BASE_URL } from '../shared/api/api.ts'
 import { formatDateIntl } from '../shared/utils/FormatDateIntl.tsx'
 import { useEffect } from 'react'
 import { useOrderStatusStore } from './useOrderStore.ts'
+import { OrderStatusForm } from './OrderStatusForm.tsx'
 
 export const OrderDetails = () => {
 	const { orderId } = useParams()
+	const { open, onOpen, onClose } = useDisclosure()
 	const { data: order } = Api.useQuery('get', '/api/v1/orders/{id}', {
 		params: {
 			path: {
@@ -34,7 +36,12 @@ export const OrderDetails = () => {
 
 	return (
 		<Box p={4}>
-			<Heading mb={4}>Заказ номер {order.orderNumber}</Heading>
+			<Stack direction={{ base: 'column', md: 'row' }} gap="52">
+				<Heading mb={4}>Заказ номер {order.orderNumber}</Heading>
+				<Button onClick={onOpen} mb={4} children="Обновить статус" />
+			</Stack>
+
+			<OrderStatusForm isOpen={open} onClose={onClose}/>
 
 			<DataList.Root orientation="horizontal">
 				<DataList.Item>
@@ -59,7 +66,7 @@ export const OrderDetails = () => {
 			</DataList.Root>
 
 			<br />
-			<Heading size="md" mb={2}> История изменения </Heading>
+			<Heading size="md" mb={2}> История изменений </Heading>
 
 			<List.Root gap={3}>
 				{statuses

@@ -28,7 +28,7 @@ export const OrderList = () => {
 		<Box p={4}>
 			<Stack direction={{ base: 'column', md: 'row' }} gap="52">
 				<Heading mb={4}>Заказы</Heading>
-				<Button onClick={onOpen} mb={4} children="Create New Order" />
+				<Button onClick={onOpen} mb={4} children="Создать новый заказ" />
 			</Stack>
 
 			<OrderForm isOpen={open} onClose={onClose} />
