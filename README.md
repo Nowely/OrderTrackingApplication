@@ -2,6 +2,13 @@
 
 Веб-приложение для отслеживания статуса заказов.
 
+## Структура
+
+- assets - сваггер, скриншоты интерфейса
+- docs - связанные с проектом документы: тз, планы
+- Client - фронтенд часть приложения
+- Server - бекенд часть приложения 
+
 ## Предварительные требования 
 
 В проекте используется .NET Aspire. Чтобы с ним работать, требуется следующее:
@@ -14,6 +21,8 @@
 		- [C# Dev Kit: Extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit) (Опционально)
 	- [JetBrains Rider with .NET Aspire plugin](https://blog.jetbrains.com/dotnet/2024/02/19/jetbrains-rider-and-the-net-aspire-plugin/) (Опционально)
 - [Node.js](https://nodejs.org/en/download) версии 20.х или выше
+
+[Детальнее](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/build-your-first-aspire-app) об .NET Aspire
 
 ## Запуск
 
