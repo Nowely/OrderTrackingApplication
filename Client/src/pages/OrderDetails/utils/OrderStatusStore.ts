@@ -1,6 +1,6 @@
 // store/orderStore.ts
 import { create } from 'zustand'
-import { components } from '../shared/api/orders.v1'
+import { components } from '../../../shared/api/orders.v1'
 
 export type OrderStatus = components['schemas']['OrderStatus']
 

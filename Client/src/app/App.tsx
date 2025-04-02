@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router'
-import { OrderList } from '../pages/OrderList.tsx'
+import { OrderListPage } from '../pages/OrderList'
 import { Center } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { OrderDetails } from '../pages/OrderDetails.tsx'
+import { OrderDetailsPage } from '../pages/OrderDetails'
 
 const queryClient = new QueryClient()
 
@@ -11,8 +11,8 @@ export const App = () => {
 		<QueryClientProvider client={queryClient}>
 			<Center>
 				<Routes>
-					<Route path="/" element={<OrderList />} />
-					<Route path="/:orderId" element={<OrderDetails/>}/>
+					<Route path="/" element={<OrderListPage />} />
+					<Route path="/:orderId" element={<OrderDetailsPage/>}/>
 				</Routes>
 			</Center>
 		</QueryClientProvider>
