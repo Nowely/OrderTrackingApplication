@@ -15,7 +15,7 @@ public sealed class OrderContext : DbContext {
 	/// <summary> Заказы </summary>
 	public DbSet<Order> Orders => Set<Order>();
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	protected override void OnModelCreating(ModelBuilder modelBuilder) {
 	}
 }

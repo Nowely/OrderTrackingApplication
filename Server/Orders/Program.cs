@@ -22,7 +22,7 @@ builder.Services.AddMassTransit(x => {
 
 	x.UsingRabbitMq((context, config) => {
 		var configService = context.GetRequiredService<IConfiguration>();
-		var connectionString = configService.GetConnectionString("Rabbit");
+		string? connectionString = configService.GetConnectionString("Rabbit");
 		config.ConfigureEndpoints(context);
 		config.Host(connectionString);
 	});

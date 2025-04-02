@@ -16,32 +16,29 @@ public class OrderStatusSubscriptionService {
 	}
 
 	/// <summary> Удалить соединение </summary>
-	public void RemoveConnection(Guid id) => _connections.TryRemove(id, out _);
+	public void RemoveConnection(Guid id) {
+		_connections.TryRemove(id, out _);
+	}
 
 	/// <summary> Отправка сообщения всем клиентам, с которыми поддерживается соединение </summary>
 	public async Task BroadcastAsync(OrderStatusMessage message) {
 		ReleaseOldConnections();
 
 		foreach (var (response, ct) in _connections.Values) {
-			var sseData = $"data: {JsonSerializer.Serialize(message, new JsonSerializerOptions() {
-				PropertyNamingPolicy  = JsonNamingPolicy.CamelCase
+			var sseData = $"data: {JsonSerializer.Serialize(message, new JsonSerializerOptions {
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
 			})}\n\n";
 			await response.WriteAsync(sseData, ct);
 			await response.Body.FlushAsync(ct);
 		}
 	}
 
-	private void ReleaseOldConnections()
-	{
+	private void ReleaseOldConnections() {
 		List<Guid> releaseKeys = [];
-		foreach (var (key, (response, ct)) in _connections) {
-			if (ct.IsCancellationRequested) {
+		foreach (var (key, (response, ct)) in _connections)
+			if (ct.IsCancellationRequested)
 				releaseKeys.Add(key);
-			}
-		}
 
-		foreach (var key in releaseKeys) {
-			_connections.TryRemove(key, out _);
-		}
+		foreach (var key in releaseKeys) _connections.TryRemove(key, out _);
 	}
 }

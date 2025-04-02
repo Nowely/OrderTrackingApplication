@@ -13,14 +13,15 @@ public class OrderService(ILogger<OrderService> logger, OrderContext context, IP
 	/// <exception cref="NotFoundException">If no entity is found</exception>
 	public async Task<OrderGet> GetByIdAsync(int id) {
 		var order = await context.Orders.ProjectToGet().FirstOrDefaultAsync(o => o.Id == id);
-		if (order == null) {
-			throw new NotFoundException($"Order with id {id} was not found");
-		}
+		if (order == null) throw new NotFoundException($"Order with id {id} was not found");
+
 		return order;
 	}
 
 	/// <summary> Получение списка заказов </summary>
-	public async Task<OrderItem[]> GetListAsync() => await context.Orders.ProjectToItem().ToArrayAsync();
+	public async Task<OrderItem[]> GetListAsync() {
+		return await context.Orders.ProjectToItem().ToArrayAsync();
+	}
 
 	/// <summary> Создания заказа </summary>
 	public async Task<OrderGet> CreateAsync(OrderCreate newOrder) {
@@ -33,9 +34,8 @@ public class OrderService(ILogger<OrderService> logger, OrderContext context, IP
 	/// <summary> Обновления статуса заказа </summary>
 	public async Task<OrderGet> UpdateStatusAsync(OrderStatusUpdate newOrderStatus) {
 		var order = await context.Orders.FirstOrDefaultAsync(o => o.Id == newOrderStatus.Id);
-		if (order == null) {
-			throw new NotFoundException($"Order with id {newOrderStatus.Id} was not found");
-		}
+		if (order == null) throw new NotFoundException($"Order with id {newOrderStatus.Id} was not found");
+
 		order.Status = newOrderStatus.Status;
 		context.Orders.Update(order);
 		await context.SaveChangesAsync();
@@ -43,7 +43,7 @@ public class OrderService(ILogger<OrderService> logger, OrderContext context, IP
 		await publisher.Publish(new OrderStatusMessage {
 			Id = order.Id,
 			Status = order.Status,
-			UpdatedAt = order.UpdatedAt,
+			UpdatedAt = order.UpdatedAt
 		});
 
 		return order.ToGet();

@@ -7,10 +7,13 @@ namespace Orders.Models;
 public enum OrderStatus {
 	/// <summary> Создан </summary>
 	Created,
+
 	/// <summary> Отправлен </summary>
 	Shipped,
+
 	/// <summary> Доставлен </summary>
 	Delivered,
+
 	/// <summary> Отменен </summary>
-	Cancelled,
+	Cancelled
 }

@@ -1,8 +1,7 @@
-
 namespace Tools.Infrastructure;
 
 /// <summary> Класс ошибки для сопоставления с ответом ValidationProblemDetails </summary>
-public class ValidationException(string? message, Dictionary<string,string[]> errors) : Exception(message) {
+public class ValidationException(string? message, Dictionary<string, string[]> errors) : Exception(message) {
 	/// <summary> Ошибки валидации. Сопоставляется как имя - поля, его ошибки. </summary>
 	public Dictionary<string, string[]> Errors { get; set; } = errors;
 }

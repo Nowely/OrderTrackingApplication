@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -11,9 +10,9 @@ using OpenTelemetry.Trace;
 namespace Microsoft.Extensions.Hosting;
 
 /// <summary>
-/// Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
-/// This project should be referenced by each service project in your solution.
-/// To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
+///     Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
+///     This project should be referenced by each service project in your solution.
+///     To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
 /// </summary>
 public static class Extensions {
 	/// <summary> Подключение базовых aspire сервисов </summary>
@@ -70,11 +69,9 @@ public static class Extensions {
 
 	private static TBuilder AddOpenTelemetryExporters<TBuilder>(this TBuilder builder)
 		where TBuilder : IHostApplicationBuilder {
-		var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+		bool useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
 
-		if (useOtlpExporter) {
-			builder.Services.AddOpenTelemetry().UseOtlpExporter();
-		}
+		if (useOtlpExporter) builder.Services.AddOpenTelemetry().UseOtlpExporter();
 
 		// Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.AspNetCore package)
 		//if (!string.IsNullOrEmpty(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
@@ -96,8 +93,9 @@ public static class Extensions {
 	}
 
 	/// <summary>
-	/// Adding health checks endpoints to applications in non-development environments has security implications.
-	/// See https://aka.ms/dotnet/aspire/healthchecks for details before enabling these endpoints in non-development environments.
+	///     Adding health checks endpoints to applications in non-development environments has security implications.
+	///     See https://aka.ms/dotnet/aspire/healthchecks for details before enabling these endpoints in non-development
+	///     environments.
 	/// </summary>
 	public static WebApplication MapDefaultEndpoints(this WebApplication app) {
 		if (app.Environment.IsDevelopment()) {

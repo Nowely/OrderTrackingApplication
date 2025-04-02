@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Net.Http.Headers;
-using Orders.Api.Services;
 using Orders.Models;
 
 namespace Orders.Api;
@@ -32,13 +31,15 @@ public static class OrdersApi {
 
 	//TODO Validation on id <= 0
 	/// <summary> Получение информации о заказе по его идентификатору </summary>
-	private static async Task<Ok<OrderGet>> GetById([AsParameters] GetOrderByIdRequest request) =>
-		TypedResults.Ok(await request.Service.GetByIdAsync(request.Id));
+	private static async Task<Ok<OrderGet>> GetById([AsParameters] GetOrderByIdRequest request) {
+		return TypedResults.Ok(await request.Service.GetByIdAsync(request.Id));
+	}
 
 	/// <summary> Получение списка запросов </summary>
 	/// <exception cref="NotImplementedException"></exception>
-	private static async Task<Ok<OrderItem[]>> GetList([AsParameters] GetOrderListRequest request) =>
-		TypedResults.Ok(await request.Service.GetListAsync());
+	private static async Task<Ok<OrderItem[]>> GetList([AsParameters] GetOrderListRequest request) {
+		return TypedResults.Ok(await request.Service.GetListAsync());
+	}
 
 	/// <summary> Создание нового заказа </summary>
 	private static async Task<Created<OrderGet>> Create([AsParameters] CreateOrderRequest request) {
@@ -46,8 +47,9 @@ public static class OrdersApi {
 	}
 
 	/// <summary> Обновление статуса заказа </summary>
-	private static async Task<Created<OrderGet>> UpdateStatus([AsParameters] UpdateOrderStatusRequest request) =>
-		TypedResults.Created("", await request.Service.UpdateStatusAsync(request.OrderStatus));
+	private static async Task<Created<OrderGet>> UpdateStatus([AsParameters] UpdateOrderStatusRequest request) {
+		return TypedResults.Created("", await request.Service.UpdateStatusAsync(request.OrderStatus));
+	}
 
 	/// <summary> Удаление заказа </summary>
 	private static async Task<NoContent> Delete([AsParameters] DeleteOrdersRequest request) {
@@ -58,15 +60,11 @@ public static class OrdersApi {
 	/// <summary> Подписка на изменение статуса заказов. Используется Server-Sent Events </summary>
 	private static async Task SubscribeOnStatusUpdate([AsParameters] SubscribeOnOrderStatusRequest request) {
 		request.HttpContext.Response.Headers.Append(HeaderNames.ContentType, "text/event-stream");
-		//context.Response.Headers.Append("Cache-Control", "no-cache");
-		//context.Response.Headers.Append("Connection", "keep-alive");
 
 		var connectionId = request.Service.AddConnection(request.HttpContext.Response, request.Token);
 
 		// Удерживаем соединение открытым
-		while (!request.Token.IsCancellationRequested) {
-			await Task.Delay(1000, request.Token);
-		}
+		while (!request.Token.IsCancellationRequested) await Task.Delay(1000, request.Token);
 
 		request.Service.RemoveConnection(connectionId);
 	}

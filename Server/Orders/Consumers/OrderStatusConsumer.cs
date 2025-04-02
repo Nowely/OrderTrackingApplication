@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Orders.Api;
 using Orders.Api.Services;
 
 namespace Orders.Consumers;

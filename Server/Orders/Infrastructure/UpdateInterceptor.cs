@@ -7,21 +7,19 @@ namespace Orders.Infrastructure;
 
 /// <summary> Интерсептор для обновления записей </summary>
 public class UpdateInterceptor : SaveChangesInterceptor {
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
 		DbContextEventData eventData,
 		InterceptionResult<int> result,
 		CancellationToken cancellationToken = default
 	) {
-		if (eventData.Context is null) return new(result);
+		if (eventData.Context is null) return new ValueTask<InterceptionResult<int>>(result);
 
 		var updatedEntries = eventData.Context.ChangeTracker.Entries()
 			.Where(entry => entry is { State: EntityState.Added or EntityState.Modified });
-		foreach (var entry in updatedEntries) {
-			SetUpdatedProp(entry);
-		}
+		foreach (var entry in updatedEntries) SetUpdatedProp(entry);
 
-		return new(result);
+		return new ValueTask<InterceptionResult<int>>(result);
 	}
 
 	private static void SetUpdatedProp(EntityEntry entry) {

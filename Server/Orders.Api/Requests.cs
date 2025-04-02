@@ -52,7 +52,8 @@ public record UpdateOrderStatusRequest {
 /// <summary> Удаление заказов </summary>
 public record DeleteOrdersRequest {
 	/// <summary> Идентификаторы заказов на удаление </summary>
-	[FromQuery, Required]
+	[FromQuery]
+	[Required]
 	public required int[] Ids { get; set; }
 
 	/// <summary> Сервис для работы с заказами </summary>
@@ -60,10 +61,8 @@ public record DeleteOrdersRequest {
 	public required OrderService Service { get; set; }
 }
 
-
 /// <summary> Обновление статуса заказа </summary>
 public record SubscribeOnOrderStatusRequest {
-
 	/// <summary> Контекст http запроса </summary>
 	public required HttpContext HttpContext { get; set; }
 

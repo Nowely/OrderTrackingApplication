@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Tools.Aspire.ServiceDefaults;
 
-/// <summary> Бэкграунд сервис для выпонения <see cref="DoWorkAsync"/> </summary>
+/// <summary> Бэкграунд сервис для выпонения <see cref="DoWorkAsync" /> </summary>
 public sealed class ScopedBackgroundServiceHandler(
 	IServiceScopeFactory serviceScopeFactory,
 	ILogger<ScopedBackgroundServiceHandler> logger
 ) : BackgroundService {
 	private const string _className = nameof(ScopedBackgroundServiceHandler);
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
 		logger.LogInformation("{Name} is running", _className);
 		await DoWorkAsync(stoppingToken);
@@ -27,7 +27,7 @@ public sealed class ScopedBackgroundServiceHandler(
 		await Task.WhenAll(tasks);
 	}
 
-	/// <inheritdoc/>
+	/// <inheritdoc />
 	public override async Task StopAsync(CancellationToken stoppingToken) {
 		logger.LogInformation("{Name} is stopping", _className);
 		await base.StopAsync(stoppingToken);
