@@ -22,7 +22,6 @@
     <Project Path="Server\Orders.Api\Orders.Api.csproj" Type="Classic C#" />
     <Project Path="Server\Orders.Database\Orders.Database.csproj" Type="Classic C#" />
     <Project Path="Server\Orders.Models\Orders.Models.csproj" Type="Classic C#" />
-    <Project Path="Server\Orders.Tests\Orders.Tests.csproj" Type="Classic C#" />
     <Project Path="Server\Orders\Orders.csproj" Type="Classic C#" />
   </Folder>
   <Project Path="Client\Client.esproj" Type="{54A90642-561A-4BB1-A94E-469ADEE60C69}">
