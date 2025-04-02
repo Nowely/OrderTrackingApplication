@@ -1,5 +1,5 @@
 import { Button, CloseButton, createListCollection, Dialog, Portal, Select } from '@chakra-ui/react'
-import { Api } from '../shared/api/api.ts'
+import { Api } from '../shared/api/Api.ts'
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'

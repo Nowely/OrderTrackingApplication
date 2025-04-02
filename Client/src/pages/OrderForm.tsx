@@ -1,5 +1,5 @@
 import { Button, CloseButton, Dialog, Input, Portal } from '@chakra-ui/react'
-import { Api } from '../shared/api/api.ts'
+import { Api } from '../shared/api/Api.ts'
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 

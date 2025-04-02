@@ -1,11 +1,10 @@
 import createFetchClient from 'openapi-fetch'
 import createClient from 'openapi-react-query'
 import { paths } from './orders.v1'
-
-export const BASE_URL: string = import.meta.env.VITE_SERVER_URL
+import { BaseUrl } from './BaseUrl.ts'
 
 const fetchClient = createFetchClient<paths>({
-	baseUrl: BASE_URL
+	baseUrl: BaseUrl
 })
 
 export const Api = createClient(fetchClient)

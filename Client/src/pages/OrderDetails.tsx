@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom'
 import { Badge, Box, Button, DataList, Heading, HStack, List, ListItem, Stack, useDisclosure } from '@chakra-ui/react'
-import { Api, BASE_URL } from '../shared/api/api.ts'
-import { formatDateIntl } from '../shared/utils/FormatDateIntl.tsx'
+import { Api } from '../shared/api/Api.ts'
 import { useEffect } from 'react'
 import { useOrderStatusStore } from './useOrderStore.ts'
 import { OrderStatusForm } from './OrderStatusForm.tsx'
+import { formatDate } from '../shared/utils/formatDate.ts'
+import { BaseUrl } from '../shared/api/BaseUrl.ts'
 
 export const OrderDetails = () => {
 	const { orderId } = useParams()
@@ -22,7 +23,7 @@ export const OrderDetails = () => {
 	useEffect(() => {
 		if (!orderId) return
 
-		const eventSource = new EventSource(`${BASE_URL}/api/v1/orders/status/subscription`)
+		const eventSource = new EventSource(`${BaseUrl}/api/v1/orders/status/subscription`)
 
 		eventSource.onmessage = (e) => {
 			const data = JSON.parse(e.data)
@@ -51,12 +52,12 @@ export const OrderDetails = () => {
 
 				<DataList.Item>
 					<DataList.ItemLabel>Дата создания</DataList.ItemLabel>
-					<DataList.ItemValue>{formatDateIntl(order.createdAt)}</DataList.ItemValue>
+					<DataList.ItemValue>{formatDate(order.createdAt)}</DataList.ItemValue>
 				</DataList.Item>
 
 				<DataList.Item>
 					<DataList.ItemLabel>Дата изменения</DataList.ItemLabel>
-					<DataList.ItemValue>{formatDateIntl(order.updatedAt)}</DataList.ItemValue>
+					<DataList.ItemValue>{formatDate(order.updatedAt)}</DataList.ItemValue>
 				</DataList.Item>
 
 				<DataList.Item>
@@ -73,7 +74,7 @@ export const OrderDetails = () => {
 					.filter(value => value.id == orderId)
 					.map((value, index) => (
 						<ListItem key={index}>
-								Статус изменен <Badge> {formatDateIntl(value.updatedAt)} </Badge>
+								Статус изменен <Badge> {formatDate(value.updatedAt)} </Badge>
 								на <Badge> {translateStatus(value.status)} </Badge>
 						</ListItem>
 					))}

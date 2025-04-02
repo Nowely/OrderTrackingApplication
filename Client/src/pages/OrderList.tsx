@@ -1,8 +1,8 @@
 import { Box, Button, Center, Heading, List, Spinner, Stack, useDisclosure, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router'
 import { OrderForm } from './OrderForm.tsx'
-import { Api } from '../shared/api/api.ts'
-import { formatDateIntl } from '../shared/utils/FormatDateIntl.tsx'
+import { Api } from '../shared/api/Api.ts'
+import { formatDate } from '../shared/utils/formatDate.ts'
 
 export const OrderList = () => {
 	const {
@@ -51,7 +51,7 @@ export const OrderList = () => {
 											<Heading size="sm">
 												Заказ номер {order.orderNumber}
 											</Heading>
-											От {formatDateIntl(order.createdAt)}
+											От {formatDate(order.createdAt)}
 										</VStack>
 									</Link>
 								</List.Item>
