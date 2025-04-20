@@ -1,11 +1,11 @@
 import { Button } from '@chakra-ui/react'
-import { Api } from '../../../shared/api/Api.ts'
+import { Api } from '../../../../shared/api/Api.ts'
 import { useEffect, FormEvent } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { Modal } from '../../../shared/components/Modal.tsx'
-import { Select } from '../../../shared/components/Select.tsx'
-import { OrderStatus } from '../../../shared/types/Order'
+import { Modal } from '../../../../shared/components/Modal.tsx'
+import { Select } from '../../../../shared/components/Select.tsx'
+import { OrderStatus } from '../../../../shared/types/Order'
 
 /**
  * Status options for the select dropdown

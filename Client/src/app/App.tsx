@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router'
 import { OrderListPage } from '../pages/OrderList'
 import { Center } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { OrderDetailsPage } from '../pages/OrderDetails'
+import { OrderDetailsPage } from '../features/orders/details'
 
 const queryClient = new QueryClient()
 

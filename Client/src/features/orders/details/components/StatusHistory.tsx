@@ -1,11 +1,14 @@
 import { useParams } from 'react-router-dom'
 import { Badge, Box, Heading, List, ListItem } from '@chakra-ui/react'
-import { formatDate } from '../../../shared/utils/formatDate.ts'
-import { translateOrderStatus } from '../../../shared/utils/translateOrderStatus.ts'
+import { formatDate } from '../../../../shared/utils/formatDate.ts'
+import { translateOrderStatus } from '../../../../shared/utils/translateOrderStatus.ts'
 import { useEffect } from 'react'
-import { BaseUrl } from '../../../shared/api/BaseUrl.ts'
-import { useOrderStatusStore } from '../../../shared/store/orderStatusStore.ts'
+import { BaseUrl } from '../../../../shared/api/BaseUrl.ts'
+import { useOrderStatusStore } from '../../../../shared/store/orderStatusStore.ts'
 
+/**
+ * Component that displays the history of status changes for an order
+ */
 export const StatusHistory = () => {
 	const { orderId } = useParams()
 	const statuses = useOrderStatusStore(state => 
@@ -30,6 +33,9 @@ export const StatusHistory = () => {
 	)
 }
 
+/**
+ * Custom hook for subscribing to status updates via SSE
+ */
 const useStatusSubscription = () => {
 	const { addStatus } = useOrderStatusStore()
 
@@ -42,5 +48,5 @@ const useStatusSubscription = () => {
 		}
 
 		return () => eventSource.close()
-	}, [])
+	}, [addStatus])
 }
