@@ -15,6 +15,8 @@ const target = env.ASPNETCORE_HTTPS_PORT
 		? env.ASPNETCORE_URLS.split(';')[0]
 		: 'https://localhost:7095'
 
+const port = Number(env.PORT ?? 5173)
+
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [react()],
@@ -30,7 +32,7 @@ export default defineConfig({
 				secure: false
 			}
 		},
-		port: env.PORT ?? 5173,
+		port,
 		https
 	}
 })

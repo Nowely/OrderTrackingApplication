@@ -16,7 +16,7 @@ orders.WithEnvironment("SelfUrl", orders.GetEndpoint("http"));
 var client = builder
 	.AddNpmApp("Client", "../../Client", "dev")
 	.WithReference(orders)
-	.WithEndpoint(3000, scheme: "https", env: "PORT")
+	.WithEndpoint(3000, scheme: "http", env: "PORT")
 	.WithEnvironment("VITE_SERVER_URL", orders.GetEndpoint("http"))
 	.ExcludeFromManifest();
 
